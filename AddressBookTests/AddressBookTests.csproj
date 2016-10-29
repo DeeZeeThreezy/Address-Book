@@ -64,7 +64,22 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Address Book\Address Book.csproj">
+      <Project>{f0f839dd-70d2-45ce-b4d0-20b5bccf146b}</Project>
+      <Name>Address Book</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AddressBook.BusinessLogic\AddressBook.BusinessLogic.csproj">
+      <Project>{0919d40d-98b0-4b16-8ed4-b164e0fff25b}</Project>
+      <Name>AddressBook.BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AddressBook.Data\AddressBook.Data.csproj">
+      <Project>{75d842f1-0196-405f-ab50-bf67849ef823}</Project>
+      <Name>AddressBook.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

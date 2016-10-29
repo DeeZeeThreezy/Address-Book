@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Address Book", "Address Boo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddressBookTests", "AddressBookTests\AddressBookTests.csproj", "{A074C769-2240-4BC4-A201-6763C0669A62}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddressBook.BusinessLogic", "AddressBook.BusinessLogic\AddressBook.BusinessLogic.csproj", "{0919D40D-98B0-4B16-8ED4-B164E0FFF25B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddressBook.Data", "AddressBook.Data\AddressBook.Data.csproj", "{75D842F1-0196-405F-AB50-BF67849EF823}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{A074C769-2240-4BC4-A201-6763C0669A62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A074C769-2240-4BC4-A201-6763C0669A62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A074C769-2240-4BC4-A201-6763C0669A62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0919D40D-98B0-4B16-8ED4-B164E0FFF25B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0919D40D-98B0-4B16-8ED4-B164E0FFF25B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0919D40D-98B0-4B16-8ED4-B164E0FFF25B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0919D40D-98B0-4B16-8ED4-B164E0FFF25B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75D842F1-0196-405F-AB50-BF67849EF823}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75D842F1-0196-405F-AB50-BF67849EF823}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75D842F1-0196-405F-AB50-BF67849EF823}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75D842F1-0196-405F-AB50-BF67849EF823}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

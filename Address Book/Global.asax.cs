@@ -13,6 +13,8 @@ namespace Address_Book
     {
         protected void Application_Start()
         {
+            AutoMapper.Mapper.Initialize(AutoMapperConfig.Configure);
+
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
