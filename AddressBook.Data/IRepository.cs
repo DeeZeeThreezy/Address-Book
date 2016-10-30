@@ -10,8 +10,8 @@ namespace AddressBook.Data
     {
         TEntity GetById(TId id);
         IEnumerable<TEntity> Get();
-        void Add(TEntity newEntity);
-        void Update(TEntity updatedEntity);
+        TEntity Add(TEntity newEntity);
+        TEntity Update(TEntity updatedEntity);
         void Delete(TEntity entity);
     }
 }

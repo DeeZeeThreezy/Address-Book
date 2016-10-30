@@ -11,8 +11,8 @@ namespace AddressBook.BusinessLogic.Contact
         Contact GetContactById(int number);
         IEnumerable<Contact> GetAllContacts();
 
-        void AddNewContact(Contact newContact);
-        void UpdateContact(Contact existingContact);
+        Contact AddNewContact(Contact newContact);
+        Contact UpdateContact(Contact existingContact);
         void RemoveContact(Contact existingContact);
     }
 }

@@ -88,7 +88,7 @@ namespace AddressBook.Data.Contact
             return _CachedContacts;
         }
 
-        public void Update(Contact updatedEntity)
+        public Contact Update(Contact updatedEntity)
         {
             var foundContact = _CachedContacts.Find(x => x.Id == updatedEntity.Id);
 
@@ -97,16 +97,21 @@ namespace AddressBook.Data.Contact
                 var contactIndex = _CachedContacts.IndexOf(foundContact);
                 _CachedContacts.RemoveAt(contactIndex);
                 _CachedContacts.Insert(contactIndex, updatedEntity);
+
+                return foundContact;
             }
             else
             {
                 // throw or return failure
+                return null;
             }
         }
 
-        public void Add(Contact newEntity)
+        public Contact Add(Contact newEntity)
         {
             _CachedContacts.Add(newEntity);
+
+            return newEntity;
         }
 
         public void Delete(Contact entity)

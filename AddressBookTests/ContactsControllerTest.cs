@@ -7,6 +7,7 @@ using Contact = Address_Book.Models.Contact;
 using System.Collections.Generic;
 using System.Linq;
 using Address_Book.Controllers;
+using System.Web.Http.Results;
 
 namespace AddressBookTests
 {
@@ -17,6 +18,8 @@ namespace AddressBookTests
 
         private ContactsController _contactsController;
 
+
+        #region Set UP
         [SetUp]
         protected void SetUp()
         {
@@ -35,13 +38,14 @@ namespace AddressBookTests
                 return this._logicContactsList.SingleOrDefault(x => x.Id == id);
             });
 
-            mock.Setup(x => x.AddNewContact(It.IsAny<LogicContact>())).Callback<LogicContact>(x =>
+            mock.Setup(x => x.AddNewContact(It.IsAny<LogicContact>())).Returns<LogicContact>(x =>
             {
                 lock (this._logicContactsList)
                 {
                     x.Id = this._logicContactsList.Max(y => y.Id) + 1;
                     this._logicContactsList.Add(x);
                 }
+                return x;
             });
 
             mock.Setup(x => x.UpdateContact(It.IsAny<LogicContact>())).Callback<LogicContact>(x =>
@@ -113,14 +117,60 @@ namespace AddressBookTests
                 }
             };
         }
+        #endregion
 
 
+        #region GET Tests
         [Test]
         public void GetContactsTest()
         {
             var controllerContacts = this._contactsController.Get();
+            var expectedCount = this._logicContactsList.Count;
 
-            Assert.That(controllerContacts.Count(), Is.EqualTo(3));
+            Assert.That(controllerContacts.Count(), Is.EqualTo(expectedCount));
         }
+
+        [Test]
+        public void GetContactTest()
+        {
+            var contactId = 1;
+
+            var actionResult = this._contactsController.Get(contactId);
+            var contentResult = actionResult as OkNegotiatedContentResult<Contact>;
+
+            var controllerContact = contentResult.Content;
+
+            Assert.That(controllerContact, Is.Not.Null);
+            Assert.That(controllerContact.Id, Is.EqualTo(contactId));
+        }
+        #endregion
+
+
+        #region POST Tests
+        [Test]
+        public void POSTValidContactTest()
+        {
+            var newContact = new Contact()
+            {
+                Id = -5,
+                Name = "New Newman",
+                NickName = "New Guy",
+                EmailAddress = "newman@newnet.com",
+                Address = "1991 N. Streety Street Phx, Az 85032",
+                Birthday = DateTime.Now
+            };
+            var expecetedId = this._logicContactsList.Max(x => x.Id) + 1;
+
+
+            var actionResult = this._contactsController.Post(newContact);
+            var contentResult = actionResult as CreatedNegotiatedContentResult<Contact>;
+
+            var newControllerContact = contentResult.Content;
+
+            Assert.That(newControllerContact, Is.Not.Null);
+            Assert.That(newControllerContact.Id, Is.EqualTo(expecetedId));
+        }
+        #endregion
+
     }
 }

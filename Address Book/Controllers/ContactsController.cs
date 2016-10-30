@@ -49,17 +49,21 @@ namespace Address_Book.Controllers
         }
 
         // POST: api/Contacts
-        public void Post([FromBody]Contact newContact)
+        public IHttpActionResult Post([FromBody]Contact newContact)
         {
             var newLogicContact = AutoMapper.Mapper.Map<LogicContact>(newContact);
-            this._contactLogic.AddNewContact(newLogicContact);
+            newContact = AutoMapper.Mapper.Map<Contact>(this._contactLogic.AddNewContact(newLogicContact));
+
+            return Created("TODO", newContact);
         }
 
         // PUT: api/Contacts/5
-        public void Put(int id, [FromBody]Contact updatedContact)
+        public IHttpActionResult Put(int id, [FromBody]Contact updatedContact)
         {
             var updatedLogicContact = AutoMapper.Mapper.Map<LogicContact>(updatedContact);
-            this._contactLogic.UpdateContact(updatedLogicContact);
+            updatedContact = AutoMapper.Mapper.Map<Contact>(this._contactLogic.UpdateContact(updatedLogicContact));
+
+            return Ok(updatedContact);
         }
 
         // DELETE: api/Contacts/5
@@ -70,6 +74,8 @@ namespace Address_Book.Controllers
             if (foundLogicContact != null)
             {
                 this._contactLogic.RemoveContact(foundLogicContact);
+
+                // void => return NoContent
             }
             else
             {

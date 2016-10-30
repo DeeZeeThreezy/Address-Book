@@ -17,10 +17,10 @@ namespace AddressBook.BusinessLogic.Contact
             this._contactRepository = RepositoryFactory.CreateContactRepository();
         }
 
-        public void AddNewContact(Contact newContact)
+        public Contact AddNewContact(Contact newContact)
         {
             var dataContact = AutoMapper.Mapper.Map<DataContact>(newContact);
-            this._contactRepository.Add(dataContact);
+            return AutoMapper.Mapper.Map<Contact>(this._contactRepository.Add(dataContact));
         }
 
         public IEnumerable<Contact> GetAllContacts()
@@ -39,9 +39,10 @@ namespace AddressBook.BusinessLogic.Contact
             this._contactRepository.Delete(AutoMapper.Mapper.Map<DataContact>(existingContact));
         }
 
-        public void UpdateContact(Contact existingContact)
+        public Contact UpdateContact(Contact existingContact)
         {
-            this._contactRepository.Update(AutoMapper.Mapper.Map<DataContact>(existingContact));
+            var updatedContact = this._contactRepository.Update(AutoMapper.Mapper.Map<DataContact>(existingContact));
+            return AutoMapper.Mapper.Map<Contact>(updatedContact);
         }
     }
 }
