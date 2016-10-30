@@ -153,6 +153,7 @@ namespace AddressBookTests
         [Test]
         public void POSTValidContactTest()
         {
+            var previousContactsCount = this._logicContactsList.Count;
             var newContact = new Contact()
             {
                 Id = -5,
@@ -166,17 +167,19 @@ namespace AddressBookTests
 
 
             var actionResult = this._contactsController.Post(newContact);
-            var contentResult = actionResult as CreatedNegotiatedContentResult<Contact>;
+            var contentResult = actionResult as CreatedAtRouteNegotiatedContentResult<Contact>;
 
             var newControllerContact = contentResult.Content;
 
             Assert.That(newControllerContact, Is.Not.Null);
             Assert.That(newControllerContact.Id, Is.EqualTo(expecetedId));
+            Assert.That(this._logicContactsList.Count, Is.EqualTo(previousContactsCount + 1));
         }
 
         [Test]
         public void POSTInvalidContactResponseTest()
         {
+            var previousContactsCount = this._logicContactsList.Count;
             var newContact = new Contact()
             {
                 Id = -5,
@@ -186,12 +189,13 @@ namespace AddressBookTests
                 Address = "who?",
                 Birthday = DateTime.Now
             };
-
+            this._contactsController.ModelState.AddModelError("test", "test"); //http://stackoverflow.com/a/22563585
 
             var actionResult = this._contactsController.Post(newContact);
-            var contentResult = actionResult as BadRequestResult;
+            var contentResult = actionResult as InvalidModelStateResult;
 
             Assert.That(contentResult, Is.Not.Null);
+            Assert.That(this._logicContactsList.Count, Is.EqualTo(previousContactsCount));
         }
         #endregion
 
@@ -239,7 +243,7 @@ namespace AddressBookTests
 
 
             var actionResult = this._contactsController.Put(updatedContact.Id, updatedContact);
-            var contentResult = actionResult as BadRequestResult;
+            var contentResult = actionResult as InvalidModelStateResult;
 
             Assert.That(contentResult, Is.Not.Null);
         }

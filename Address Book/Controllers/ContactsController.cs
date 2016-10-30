@@ -34,6 +34,7 @@ namespace Address_Book.Controllers
         }
 
         // GET: api/Contacts/5
+        [Route("{id}", Name = "GetContact")]
         public IHttpActionResult Get(int id)
         {
             var foundLogicContact = this._contactLogic.GetContactById(id);
@@ -51,10 +52,17 @@ namespace Address_Book.Controllers
         // POST: api/Contacts
         public IHttpActionResult Post([FromBody]Contact newContact)
         {
-            var newLogicContact = AutoMapper.Mapper.Map<LogicContact>(newContact);
-            newContact = AutoMapper.Mapper.Map<Contact>(this._contactLogic.AddNewContact(newLogicContact));
+            if (ModelState.IsValid)
+            {
+                var newLogicContact = AutoMapper.Mapper.Map<LogicContact>(newContact);
+                newContact = AutoMapper.Mapper.Map<Contact>(this._contactLogic.AddNewContact(newLogicContact));
 
-            return Created("TODO", newContact);
+                return CreatedAtRoute("GetContact", new { id=newContact.Id }, newContact);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         // PUT: api/Contacts/5
