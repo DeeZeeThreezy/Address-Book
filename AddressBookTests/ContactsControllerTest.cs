@@ -19,7 +19,7 @@ namespace AddressBookTests
         private ContactsController _contactsController;
 
 
-        #region Set UP
+        #region Set Up
         [SetUp]
         protected void SetUp()
         {
@@ -48,7 +48,7 @@ namespace AddressBookTests
                 return x;
             });
 
-            mock.Setup(x => x.UpdateContact(It.IsAny<LogicContact>())).Callback<LogicContact>(x =>
+            mock.Setup(x => x.UpdateContact(It.IsAny<LogicContact>())).Returns<LogicContact>(x =>
             {
                 lock (this._logicContactsList)
                 {
@@ -59,10 +59,13 @@ namespace AddressBookTests
                         var contactIndex = this._logicContactsList.IndexOf(foundContact);
                         _logicContactsList.RemoveAt(contactIndex);
                         _logicContactsList.Insert(contactIndex, x);
+
+                        return x;
                     }
                     else
                     {
                         // throw or return failure
+                        return null;
                     }
                 }
             });
@@ -122,7 +125,7 @@ namespace AddressBookTests
 
         #region GET Tests
         [Test]
-        public void GetContactsTest()
+        public void GETContactsTest()
         {
             var controllerContacts = this._contactsController.Get();
             var expectedCount = this._logicContactsList.Count;
@@ -131,7 +134,7 @@ namespace AddressBookTests
         }
 
         [Test]
-        public void GetContactTest()
+        public void GETContactTest()
         {
             var contactId = 1;
 
@@ -170,7 +173,123 @@ namespace AddressBookTests
             Assert.That(newControllerContact, Is.Not.Null);
             Assert.That(newControllerContact.Id, Is.EqualTo(expecetedId));
         }
+
+        [Test]
+        public void POSTInvalidContactResponseTest()
+        {
+            var newContact = new Contact()
+            {
+                Id = -5,
+                Name = "New Newman",
+                NickName = "New Guy",
+                EmailAddress = "not a valid email address",
+                Address = "who?",
+                Birthday = DateTime.Now
+            };
+
+
+            var actionResult = this._contactsController.Post(newContact);
+            var contentResult = actionResult as BadRequestResult;
+
+            Assert.That(contentResult, Is.Not.Null);
+        }
         #endregion
 
+
+        #region PUT Tests
+        [Test]
+        public void PUTValidContactTest()
+        {
+            var prevContactState = this._logicContactsList[0];
+            var updatedContact = new Contact()
+            {
+                Id = prevContactState.Id,
+                Name = new String(prevContactState.Name.Reverse().ToArray()),
+                NickName = new String(prevContactState.NickName.Reverse().ToArray()),
+                EmailAddress = prevContactState.EmailAddress,
+                Address = prevContactState.Address,
+                Birthday = DateTime.Now
+            };
+
+
+            var actionResult = this._contactsController.Put(updatedContact.Id, updatedContact);
+            var contentResult = actionResult as OkNegotiatedContentResult<Contact>;
+
+            var updatedContactResult = contentResult.Content;
+
+            Assert.That(updatedContactResult, Is.Not.Null);
+            Assert.That(updatedContactResult.Id, Is.EqualTo(prevContactState.Id));
+            Assert.That(updatedContactResult.Name, Is.EqualTo(updatedContact.Name));
+            Assert.That(updatedContactResult.NickName, Is.EqualTo(updatedContact.NickName));
+        }
+
+        [Test]
+        public void PUTInvalidContactResponseTest()
+        {
+            var prevContactState = this._logicContactsList[0];
+            var updatedContact = new Contact()
+            {
+                Id = prevContactState.Id,
+                Name = new String(prevContactState.Name.Reverse().ToArray()),
+                NickName = new String(prevContactState.NickName.Reverse().ToArray()),
+                EmailAddress = "Invalid Email",
+                Address = "Invalid Address",
+                Birthday = DateTime.Now
+            };
+
+
+            var actionResult = this._contactsController.Put(updatedContact.Id, updatedContact);
+            var contentResult = actionResult as BadRequestResult;
+
+            Assert.That(contentResult, Is.Not.Null);
+        }
+
+        [Test]
+        public void PUTNotFoundContactResponseTest()
+        {
+            var prevContactState = this._logicContactsList[0];
+            var updatedContact = new Contact()
+            {
+                Id = this._logicContactsList.Max(x => x.Id) + 5,
+                Name = new String(prevContactState.Name.Reverse().ToArray()),
+                NickName = new String(prevContactState.NickName.Reverse().ToArray()),
+                EmailAddress = "Invalid Email",
+                Address = "Invalid Address",
+                Birthday = DateTime.Now
+            };
+
+
+            var actionResult = this._contactsController.Put(updatedContact.Id, updatedContact);
+            var contentResult = actionResult as NotFoundResult;
+
+            Assert.That(contentResult, Is.Not.Null);
+        }
+        #endregion
+
+
+        #region DELETE Tests
+        [Test]
+        public void DELETEExisingContact()
+        {
+            var contactToDelete = this._logicContactsList[0];
+            var prevContactsListSize = this._logicContactsList.Count;
+
+            this._contactsController.Delete(contactToDelete.Id);
+
+            Assert.That(this._logicContactsList.Count, Is.LessThan(prevContactsListSize));
+            Assert.That(this._logicContactsList.Any(x => x.Id == contactToDelete.Id), Is.Not.True);
+        }
+
+        [Test]
+        public void DELETENotFoundContact()
+        {
+            var nonExistantId = this._logicContactsList.Max(x => x.Id) + 1;
+            var prevContactsListSize = this._logicContactsList.Count;
+
+            this._contactsController.Delete(nonExistantId);
+
+            Assert.That(this._logicContactsList.Count, Is.SameAs(prevContactsListSize));
+        }
+        #endregion
     }
 }
