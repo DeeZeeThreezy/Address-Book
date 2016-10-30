@@ -68,26 +68,39 @@ namespace Address_Book.Controllers
         // PUT: api/Contacts/5
         public IHttpActionResult Put(int id, [FromBody]Contact updatedContact)
         {
-            var updatedLogicContact = AutoMapper.Mapper.Map<LogicContact>(updatedContact);
-            updatedContact = AutoMapper.Mapper.Map<Contact>(this._contactLogic.UpdateContact(updatedLogicContact));
+            if (ModelState.IsValid)
+            {
+                var existingContact = this._contactLogic.GetContactById(id);
+                if (existingContact == null)
+                {
+                    return NotFound();
+                }
 
-            return Ok(updatedContact);
+                var updatedLogicContact = AutoMapper.Mapper.Map<LogicContact>(updatedContact);
+                updatedContact = AutoMapper.Mapper.Map<Contact>(this._contactLogic.UpdateContact(updatedLogicContact));
+
+                return Ok(updatedContact);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         // DELETE: api/Contacts/5
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
             var foundLogicContact = this._contactLogic.GetContactById(id);
 
             if (foundLogicContact != null)
             {
                 this._contactLogic.RemoveContact(foundLogicContact);
-
-                // void => return NoContent
+                
+                return StatusCode(HttpStatusCode.NoContent);
             }
             else
             {
-                // return NotCreated or something like that
+                return NotFound();
             }
         }
     }

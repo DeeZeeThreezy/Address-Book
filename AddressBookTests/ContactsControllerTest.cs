@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Address_Book.Controllers;
 using System.Web.Http.Results;
+using System.Net;
 
 namespace AddressBookTests
 {
@@ -240,6 +241,7 @@ namespace AddressBookTests
                 Address = "Invalid Address",
                 Birthday = DateTime.Now
             };
+            this._contactsController.ModelState.AddModelError("test", "test"); //http://stackoverflow.com/a/22563585
 
 
             var actionResult = this._contactsController.Put(updatedContact.Id, updatedContact);
@@ -278,8 +280,10 @@ namespace AddressBookTests
             var contactToDelete = this._logicContactsList[0];
             var prevContactsListSize = this._logicContactsList.Count;
 
-            this._contactsController.Delete(contactToDelete.Id);
+            var actionResult = this._contactsController.Delete(contactToDelete.Id);
+            var contentResult = actionResult as StatusCodeResult;
 
+            Assert.That(contentResult.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
             Assert.That(this._logicContactsList.Count, Is.LessThan(prevContactsListSize));
             Assert.That(this._logicContactsList.Any(x => x.Id == contactToDelete.Id), Is.Not.True);
         }
@@ -290,9 +294,12 @@ namespace AddressBookTests
             var nonExistantId = this._logicContactsList.Max(x => x.Id) + 1;
             var prevContactsListSize = this._logicContactsList.Count;
 
-            this._contactsController.Delete(nonExistantId);
 
-            Assert.That(this._logicContactsList.Count, Is.SameAs(prevContactsListSize));
+            var actionResult = this._contactsController.Delete(nonExistantId);
+            var contentResult = actionResult as NotFoundResult;
+
+            Assert.That(contentResult, Is.Not.Null);
+            Assert.That(this._logicContactsList.Count, Is.EqualTo(prevContactsListSize));
         }
         #endregion
     }
