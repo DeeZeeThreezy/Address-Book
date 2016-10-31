@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/babel '../../App' -d '../../Scripts/Address Book'"
+    "build": "./node_modules/.bin/babel '../../App' -d '../../Scripts/Address Book'",
+    "watch-webpack": "webpack --config ./webpack.config.js --watch"
   },
   "author": "",
   "license": "ISC",

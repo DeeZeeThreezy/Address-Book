@@ -1,9 +1,24 @@
 import React, { Component } from 'react';
+import ContactsList from './ContactsList';
+
 
 class App extends Component {
   render() {
+
+    var dummyContacts = [
+      {
+        id: 0,
+        name: 'Domingo',
+        nickName: 'Dom'
+      }
+    ];
+
     return (
+
       <div className="App">
+
+        <ContactsList contacts={dummyContacts}></ContactsList>
+
         <div className="App-header">
           <h2>Welcome to React</h2>
         </div>
