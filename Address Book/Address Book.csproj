@@ -266,6 +266,10 @@
     <Content Include="Scripts\app\App.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
+    <Content Include="Scripts\app\Contact.js" />
+    <Content Include="Scripts\app\ContactEdit.js" />
+    <Content Include="Scripts\app\ContactInfo.js" />
+    <Content Include="Scripts\app\ContactsList.js" />
     <Content Include="Scripts\app\index.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

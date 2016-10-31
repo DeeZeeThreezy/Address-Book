@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Contact from './Contact';
 
 
-
 class ContactsList extends Component {
 
     constructor(props) {
@@ -13,7 +12,7 @@ class ContactsList extends Component {
     }
 
     componentDidMount() {
-        
+
     }
 
     componentWillUnmount() {

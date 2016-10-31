@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 
 class Contact extends Component {
     render() {
@@ -13,6 +14,7 @@ class Contact extends Component {
 
         return (
             <div>
+                <Link to={"/contact/" + contact.id}></Link>
                 <h5>{contact.nickName}</h5>
                 <p>{contact.name}</p>
             </div>
