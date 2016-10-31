@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 import Contact from './Contact';
+import { GetContacts } from './ContactsService';
+
 
 
 class ContactsList extends Component {
@@ -12,7 +15,11 @@ class ContactsList extends Component {
     }
 
     componentDidMount() {
-
+        GetContacts().done((contacts) => {
+            this.setState({
+                contacts: contacts
+            });
+        });
     }
 
     componentWillUnmount() {
@@ -38,9 +45,12 @@ class ContactsList extends Component {
         ));
 
         return (
-            <ul>
-                {contactItems}
-            </ul>
+            <div>
+                <ul>
+                    {contactItems}
+                </ul>
+                <Link to={`/contact/new`}>Add New Contact</Link>
+            </div>
         );
     }
 }

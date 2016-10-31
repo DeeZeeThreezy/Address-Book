@@ -34,7 +34,7 @@ namespace Address_Book.Controllers
         }
 
         // GET: api/Contacts/5
-        [Route("{id}", Name = "GetContact")]
+        //[Route("contacts/{id}", Name = "GetContact")] // TODO: figure out why this route always goes to `api/contacts` instead
         public IHttpActionResult Get(int id)
         {
             var foundLogicContact = this._contactLogic.GetContactById(id);

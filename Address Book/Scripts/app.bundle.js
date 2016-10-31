@@ -29396,9 +29396,9 @@
 
 	var _ContactInfo2 = _interopRequireDefault(_ContactInfo);
 
-	var _ContactEdit = __webpack_require__(529);
+	var _ContactForm = __webpack_require__(531);
 
-	var _ContactEdit2 = _interopRequireDefault(_ContactEdit);
+	var _ContactForm2 = _interopRequireDefault(_ContactForm);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29407,34 +29407,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	// class App extends Component {
-	//   render() {
-
-	//     var dummyContacts = [
-	//       {
-	//         id: 0,
-	//         name: 'Domingo',
-	//         nickName: 'Dom'
-	//       }
-	//     ];
-
-	//     return (
-
-	//       <div className="App">
-
-	//         <ContactsList contacts={dummyContacts}></ContactsList>
-
-	//         <div className="App-header">
-	//           <h2>Welcome to React</h2>
-	//         </div>
-	//         <p className="App-intro">
-	//           To get started, edit <code>src/App.js</code> and save to reload.
-	//         </p>
-	//       </div>
-	//     );
-	//   }
-	// }
 
 	var App = function (_Component) {
 	  _inherits(App, _Component);
@@ -29459,8 +29431,9 @@
 	        _reactRouter.Router,
 	        { history: _reactRouter.hashHistory },
 	        _react2.default.createElement(_reactRouter.Route, { path: '/', component: _ContactsList2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: '/contact/new', component: _ContactForm2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '/contact/:id', component: _ContactInfo2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: '/add-contact', component: _ContactEdit2.default })
+	        _react2.default.createElement(_reactRouter.Route, { path: '/contact/:id/edit', component: _ContactForm2.default })
 	      );
 	    }
 	  }]);
@@ -29486,9 +29459,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRouter = __webpack_require__(473);
+
 	var _Contact = __webpack_require__(470);
 
 	var _Contact2 = _interopRequireDefault(_Contact);
+
+	var _ContactsService = __webpack_require__(530);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29514,7 +29491,15 @@
 
 	    _createClass(ContactsList, [{
 	        key: 'componentDidMount',
-	        value: function componentDidMount() {}
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            (0, _ContactsService.GetContacts)().done(function (contacts) {
+	                _this2.setState({
+	                    contacts: contacts
+	                });
+	            });
+	        }
 	    }, {
 	        key: 'componentWillUnmount',
 	        value: function componentWillUnmount() {}
@@ -29546,9 +29531,18 @@
 	            });
 
 	            return _react2.default.createElement(
-	                'ul',
+	                'div',
 	                null,
-	                contactItems
+	                _react2.default.createElement(
+	                    'ul',
+	                    null,
+	                    contactItems
+	                ),
+	                _react2.default.createElement(
+	                    _reactRouter.Link,
+	                    { to: '/contact/new' },
+	                    'Add New Contact'
+	                )
 	            );
 	        }
 	    }]);
@@ -29609,11 +29603,14 @@
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(_reactRouter.Link, { to: "/contact/" + contact.id }),
 	                _react2.default.createElement(
-	                    'h5',
-	                    null,
-	                    contact.nickName
+	                    _reactRouter.Link,
+	                    { to: "/contact/" + contact.id },
+	                    _react2.default.createElement(
+	                        'h3',
+	                        null,
+	                        contact.nickName
+	                    )
 	                ),
 	                _react2.default.createElement(
 	                    'p',
@@ -34552,6 +34549,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRouter = __webpack_require__(473);
+
+	var _ContactsService = __webpack_require__(530);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -34563,16 +34564,44 @@
 	var ContactInfo = function (_Component) {
 	    _inherits(ContactInfo, _Component);
 
-	    function ContactInfo() {
+	    function ContactInfo(props) {
 	        _classCallCheck(this, ContactInfo);
 
-	        return _possibleConstructorReturn(this, (ContactInfo.__proto__ || Object.getPrototypeOf(ContactInfo)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (ContactInfo.__proto__ || Object.getPrototypeOf(ContactInfo)).call(this, props));
+
+	        _this.state = {
+	            contact: null
+	        };
+	        return _this;
 	    }
 
 	    _createClass(ContactInfo, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            var contactId = this.props.params.id;
+
+	            (0, _ContactsService.GetContact)(contactId).done(function (contact) {
+	                _this2.setState({
+	                    contact: contact
+	                });
+	            });
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {}
+	    }, {
+	        key: 'delete',
+	        value: function _delete() {
+	            (0, _ContactsService.DeleteContact)(this.state.contact).done(function () {
+	                alert('Contact deleted');
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var contact = this.props.contact;
+	            var contact = this.state.contact;
 
 	            if (!contact) {
 	                return _react2.default.createElement(
@@ -34595,7 +34624,7 @@
 	                    'h4',
 	                    null,
 	                    'Contact Info: ',
-	                    this.props.params.id
+	                    contact.id
 	                ),
 	                _react2.default.createElement(
 	                    'h5',
@@ -34606,6 +34635,16 @@
 	                    'p',
 	                    null,
 	                    contact.name
+	                ),
+	                _react2.default.createElement(
+	                    _reactRouter.Link,
+	                    { to: '/contact/' + contact.id + '/edit' },
+	                    'Edit'
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { type: 'button', onClick: this.delete },
+	                    'Delete'
 	                )
 	            );
 	        }
@@ -34617,7 +34656,58 @@
 	exports.default = ContactInfo;
 
 /***/ },
-/* 529 */
+/* 529 */,
+/* 530 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.GetContacts = GetContacts;
+	exports.GetContact = GetContact;
+	exports.AddContact = AddContact;
+	exports.UpdatedContact = UpdatedContact;
+	exports.DeleteContact = DeleteContact;
+	function GetContacts() {
+	    return $.get('api/contacts', function (contacts) {
+	        return contacts;
+	    });
+	};
+
+	function GetContact(id) {
+	    return $.get('api/contacts/' + id, function (contact) {
+	        return contact;
+	    });
+	};
+
+	function AddContact(newContact) {
+	    return $.post('api/contacts', newContact, function (savedContact) {
+	        return savedContact;
+	    });
+	};
+
+	function UpdatedContact(updatedContact) {
+
+	    return $.ajax({
+	        type: 'PUT',
+	        url: 'api/contacts/' + updatedContact.id,
+	        contentType: "application/json",
+	        data: updatedContact
+	    });
+	};
+
+	function DeleteContact(updatedContact) {
+
+	    return $.ajax({
+	        type: 'DELETE',
+	        url: 'api/contacts/' + updatedContact.id
+	    });
+	};
+
+/***/ },
+/* 531 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34640,18 +34730,19 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var ContactEdit = function (_Component) {
-	    _inherits(ContactEdit, _Component);
+	var ContactForm = function (_Component) {
+	    _inherits(ContactForm, _Component);
 
-	    function ContactEdit() {
-	        _classCallCheck(this, ContactEdit);
+	    function ContactForm() {
+	        _classCallCheck(this, ContactForm);
 
-	        return _possibleConstructorReturn(this, (ContactEdit.__proto__ || Object.getPrototypeOf(ContactEdit)).apply(this, arguments));
+	        return _possibleConstructorReturn(this, (ContactForm.__proto__ || Object.getPrototypeOf(ContactForm)).apply(this, arguments));
 	    }
 
-	    _createClass(ContactEdit, [{
+	    _createClass(ContactForm, [{
 	        key: 'render',
 	        value: function render() {
+	            debugger;
 	            var contact = this.props.contact;
 
 	            if (!contact) {
@@ -34685,10 +34776,10 @@
 	        }
 	    }]);
 
-	    return ContactEdit;
+	    return ContactForm;
 	}(_react.Component);
 
-	exports.default = ContactEdit;
+	exports.default = ContactForm;
 
 /***/ }
 /******/ ]);

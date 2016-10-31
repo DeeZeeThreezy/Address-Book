@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
-class ContactEdit extends Component {
+class ContactForm extends Component {
     render() {
+        debugger;
         var contact = this.props.contact;
 
         if(!contact) {
@@ -21,4 +22,4 @@ class ContactEdit extends Component {
     }
 }
 
-export default ContactEdit;
+export default ContactForm;
