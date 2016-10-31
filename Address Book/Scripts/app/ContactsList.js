@@ -27,6 +27,7 @@ class ContactsList extends Component {
     }
 
     render() {
+        debugger;
         var contacts = this.state.contacts;
 
         if(!contacts) {
@@ -41,7 +42,7 @@ class ContactsList extends Component {
         }
 
         var contactItems = contacts.map(c => (
-            <li><Contact key={c.id} contact={c}></Contact></li>
+            <li key={c.id}><Contact contact={c}></Contact></li>
         ));
 
         return (

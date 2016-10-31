@@ -14,7 +14,7 @@ class Contact extends Component {
 
         return (
             <div>
-                <Link to={"/contact/" + contact.id}><h3>{contact.nickName}</h3></Link>
+                <Link to={"/contact/" + contact.id}><h3>{contact.nickName ? contact.nickName : contact.name}</h3></Link>
                 <p>{contact.name}</p>
             </div>
         );

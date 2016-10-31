@@ -22,7 +22,7 @@ export function UpdatedContact(updatedContact) {
         type: 'PUT',
         url: `api/contacts/${updatedContact.id}`,
         contentType: "application/json",
-        data: updatedContact
+        data: JSON.stringify(updatedContact)
     });
 };
 

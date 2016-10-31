@@ -57,7 +57,7 @@ namespace Address_Book.Controllers
                 var newLogicContact = AutoMapper.Mapper.Map<LogicContact>(newContact);
                 newContact = AutoMapper.Mapper.Map<Contact>(this._contactLogic.AddNewContact(newLogicContact));
 
-                return CreatedAtRoute("GetContact", new { id=newContact.Id }, newContact);
+                return CreatedAtRoute("DefaultApi", new { id=newContact.Id }, newContact);
             }
             else
             {

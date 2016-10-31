@@ -24,7 +24,9 @@ class ContactForm extends Component {
 
 
     add() {
-        AddContact(this.state.contact).done(() => {
+        debugger;
+        AddContact(this.state.contact).done((contact) => {
+            debugger;
             alert('Contact added');
         });
     }
@@ -97,7 +99,7 @@ class ContactForm extends Component {
         }
 
         return (
-            <form onSubmit={this.isEdit(contact.id) ? this.update : this.save}>
+            <form onSubmit={this.isEdit(contact.id) ? this.update : this.add}>
                 <h3>{this.isEdit(contact.id) ? 'Update Contact' : 'Add New Contact'}</h3>
                 <div>
                     <label>

@@ -109,6 +109,8 @@ namespace AddressBook.Data.Contact
 
         public Contact Add(Contact newEntity)
         {
+            newEntity.Id = _CachedContacts.Max(x => x.Id) + 1;
+
             _CachedContacts.Add(newEntity);
 
             return newEntity;

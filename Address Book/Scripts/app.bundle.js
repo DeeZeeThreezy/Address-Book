@@ -29506,6 +29506,7 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            debugger;
 	            var contacts = this.state.contacts;
 
 	            if (!contacts) {
@@ -29525,8 +29526,8 @@
 	            var contactItems = contacts.map(function (c) {
 	                return _react2.default.createElement(
 	                    'li',
-	                    null,
-	                    _react2.default.createElement(_Contact2.default, { key: c.id, contact: c })
+	                    { key: c.id },
+	                    _react2.default.createElement(_Contact2.default, { contact: c })
 	                );
 	            });
 
@@ -29609,7 +29610,7 @@
 	                    _react2.default.createElement(
 	                        'h3',
 	                        null,
-	                        contact.nickName
+	                        contact.nickName ? contact.nickName : contact.name
 	                    )
 	                ),
 	                _react2.default.createElement(
@@ -34770,7 +34771,7 @@
 	        type: 'PUT',
 	        url: 'api/contacts/' + updatedContact.id,
 	        contentType: "application/json",
-	        data: updatedContact
+	        data: JSON.stringify(updatedContact)
 	    });
 	};
 
@@ -34840,7 +34841,9 @@
 	    }, {
 	        key: 'add',
 	        value: function add() {
-	            (0, _ContactsService.AddContact)(this.state.contact).done(function () {
+	            debugger;
+	            (0, _ContactsService.AddContact)(this.state.contact).done(function (contact) {
+	                debugger;
 	                alert('Contact added');
 	            });
 	        }
@@ -34926,7 +34929,7 @@
 
 	            return _react2.default.createElement(
 	                'form',
-	                { onSubmit: this.isEdit(contact.id) ? this.update : this.save },
+	                { onSubmit: this.isEdit(contact.id) ? this.update : this.add },
 	                _react2.default.createElement(
 	                    'h3',
 	                    null,
