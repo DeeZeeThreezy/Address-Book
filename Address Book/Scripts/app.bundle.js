@@ -34823,15 +34823,21 @@
 	        _this.state = {
 	            contact: null
 	        };
-
+	        debugger;
 	        _this.add = _this.add.bind(_this);
 	        _this.update = _this.update.bind(_this);
 	        _this.delete = _this.delete.bind(_this);
 	        _this.updateContactState = _this.updateContactState.bind(_this);
+	        _this.initComponent = _this.initComponent.bind(_this);
 	        return _this;
 	    }
 
 	    _createClass(ContactForm, [{
+	        key: 'isEdit',
+	        value: function isEdit(contactId) {
+	            return Number.isInteger(parseInt(contactId));
+	        }
+	    }, {
 	        key: 'add',
 	        value: function add() {
 	            (0, _ContactsService.AddContact)(this.state.contact).done(function () {
@@ -34870,14 +34876,22 @@
 	            });
 	        }
 	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            this.initComponent(nextProps.params.id);
+	        }
+	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
+	            this.initComponent(this.props.params.id);
+	        }
+	    }, {
+	        key: 'initComponent',
+	        value: function initComponent(contactId) {
 	            var _this2 = this;
 
-	            var contactId = this.props.params.id;
-
 	            // If Editing
-	            if (contactId) {
+	            if (this.isEdit(contactId)) {
 	                (0, _ContactsService.GetContact)(contactId).done(function (contact) {
 	                    _this2.setState({
 	                        contact: contact
@@ -34900,6 +34914,8 @@
 
 	            var contact = this.state.contact;
 
+	            console.log(this.state.contact);
+
 	            if (!contact) {
 	                return _react2.default.createElement(
 	                    'div',
@@ -34910,7 +34926,12 @@
 
 	            return _react2.default.createElement(
 	                'form',
-	                { onSubmit: this.update },
+	                { onSubmit: this.isEdit(contact.id) ? this.update : this.save },
+	                _react2.default.createElement(
+	                    'h3',
+	                    null,
+	                    this.isEdit(contact.id) ? 'Update Contact' : 'Add New Contact'
+	                ),
 	                _react2.default.createElement(
 	                    'div',
 	                    null,
@@ -34918,7 +34939,7 @@
 	                        'label',
 	                        null,
 	                        'Name',
-	                        _react2.default.createElement('input', { placeholder: 'Name', type: 'text', value: contact.name, onChange: function onChange(e) {
+	                        _react2.default.createElement('input', { placeholder: 'Name', type: 'text', value: contact.name ? contact.name : '', onChange: function onChange(e) {
 	                                return _this3.updateContactState({ name: e.target.value });
 	                            }, required: true })
 	                    )
@@ -34930,7 +34951,7 @@
 	                        'label',
 	                        null,
 	                        'Nick Name',
-	                        _react2.default.createElement('input', { placeholder: 'Nick Name', type: 'text', value: contact.nickName, onChange: function onChange(e) {
+	                        _react2.default.createElement('input', { placeholder: 'Nick Name', type: 'text', value: contact.nickName ? contact.nickName : '', onChange: function onChange(e) {
 	                                return _this3.updateContactState({ nickName: e.target.value });
 	                            } })
 	                    )
@@ -34942,7 +34963,7 @@
 	                        'label',
 	                        null,
 	                        'Birthday',
-	                        _react2.default.createElement('input', { placeholder: 'Birthday', type: 'date', value: contact.birthday, onChange: function onChange(e) {
+	                        _react2.default.createElement('input', { placeholder: 'Birthday', type: 'date', value: contact.birthday ? contact.birthday : '', onChange: function onChange(e) {
 	                                return _this3.updateContactState({ birthday: e.target.value });
 	                            } })
 	                    )
@@ -34954,7 +34975,7 @@
 	                        'label',
 	                        null,
 	                        'Job Title',
-	                        _react2.default.createElement('input', { placeholder: 'Job Title', type: 'text', value: contact.jobTitle, onChange: function onChange(e) {
+	                        _react2.default.createElement('input', { placeholder: 'Job Title', type: 'text', value: contact.jobTitle ? contact.jobTitle : '', onChange: function onChange(e) {
 	                                return _this3.updateContactState({ jobTitle: e.target.value });
 	                            } })
 	                    )
@@ -34966,7 +34987,7 @@
 	                        'label',
 	                        null,
 	                        'Company',
-	                        _react2.default.createElement('input', { placeholder: 'Company', type: 'text', value: contact.company, onChange: function onChange(e) {
+	                        _react2.default.createElement('input', { placeholder: 'Company', type: 'text', value: contact.company ? contact.company : '', onChange: function onChange(e) {
 	                                return _this3.updateContactState({ company: e.target.value });
 	                            } })
 	                    )
@@ -34978,7 +34999,7 @@
 	                        'label',
 	                        null,
 	                        'Phone Number',
-	                        _react2.default.createElement('input', { placeholder: 'Phone Number', type: 'tel', value: contact.phoneNumber, onChange: function onChange(e) {
+	                        _react2.default.createElement('input', { placeholder: 'Phone Number', type: 'tel', value: contact.phoneNumber ? contact.phoneNumber : '', onChange: function onChange(e) {
 	                                return _this3.updateContactState({ phoneNumber: e.target.value });
 	                            } })
 	                    )
@@ -34990,7 +35011,7 @@
 	                        'label',
 	                        null,
 	                        'Email Address',
-	                        _react2.default.createElement('input', { placeholder: 'Email Address', type: 'email', value: contact.emailAddress, onChange: function onChange(e) {
+	                        _react2.default.createElement('input', { placeholder: 'Email Address', type: 'email', value: contact.emailAddress ? contact.emailAddress : '', onChange: function onChange(e) {
 	                                return _this3.updateContactState({ emailAddress: e.target.value });
 	                            } })
 	                    )
@@ -35002,7 +35023,7 @@
 	                        'label',
 	                        null,
 	                        'Address',
-	                        _react2.default.createElement('input', { placeholder: 'Address', type: 'text', value: contact.address, onChange: function onChange(e) {
+	                        _react2.default.createElement('input', { placeholder: 'Address', type: 'text', value: contact.address ? contact.address : '', onChange: function onChange(e) {
 	                                return _this3.updateContactState({ address: e.target.value });
 	                            } })
 	                    )
