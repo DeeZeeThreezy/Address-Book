@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "babel-polyfill": "^6.16.0",
+    "immutability-helper": "^2.0.0",
     "jQuery": "^1.7.4",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",

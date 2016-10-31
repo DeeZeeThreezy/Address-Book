@@ -34572,10 +34572,19 @@
 	        _this.state = {
 	            contact: null
 	        };
+
+	        _this.delete = _this.delete.bind(_this);
 	        return _this;
 	    }
 
 	    _createClass(ContactInfo, [{
+	        key: 'delete',
+	        value: function _delete() {
+	            (0, _ContactsService.DeleteContact)(this.state.contact).done(function () {
+	                alert('Contact deleted');
+	            });
+	        }
+	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            var _this2 = this;
@@ -34591,13 +34600,6 @@
 	    }, {
 	        key: 'componentWillUnmount',
 	        value: function componentWillUnmount() {}
-	    }, {
-	        key: 'delete',
-	        value: function _delete() {
-	            (0, _ContactsService.DeleteContact)(this.state.contact).done(function () {
-	                alert('Contact deleted');
-	            });
-	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
@@ -34623,18 +34625,92 @@
 	                _react2.default.createElement(
 	                    'h4',
 	                    null,
-	                    'Contact Info: ',
-	                    contact.id
+	                    'Contact: ',
+	                    contact.nickName ? contact.nickName : contact.name
 	                ),
 	                _react2.default.createElement(
-	                    'h5',
+	                    'dl',
 	                    null,
-	                    contact.nickName
-	                ),
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    contact.name
+	                    _react2.default.createElement(
+	                        'dt',
+	                        null,
+	                        'Name'
+	                    ),
+	                    _react2.default.createElement(
+	                        'dd',
+	                        null,
+	                        contact.name
+	                    ),
+	                    _react2.default.createElement(
+	                        'dt',
+	                        null,
+	                        'Nick Name'
+	                    ),
+	                    _react2.default.createElement(
+	                        'dd',
+	                        null,
+	                        contact.nickName
+	                    ),
+	                    _react2.default.createElement(
+	                        'dt',
+	                        null,
+	                        'Birthday'
+	                    ),
+	                    _react2.default.createElement(
+	                        'dd',
+	                        null,
+	                        contact.birthday
+	                    ),
+	                    _react2.default.createElement(
+	                        'dt',
+	                        null,
+	                        'Job Title'
+	                    ),
+	                    _react2.default.createElement(
+	                        'dd',
+	                        null,
+	                        contact.jobTitle
+	                    ),
+	                    _react2.default.createElement(
+	                        'dt',
+	                        null,
+	                        'Company'
+	                    ),
+	                    _react2.default.createElement(
+	                        'dd',
+	                        null,
+	                        contact.company
+	                    ),
+	                    _react2.default.createElement(
+	                        'dt',
+	                        null,
+	                        'Phone Number'
+	                    ),
+	                    _react2.default.createElement(
+	                        'dd',
+	                        null,
+	                        contact.phoneNumber
+	                    ),
+	                    _react2.default.createElement(
+	                        'dt',
+	                        null,
+	                        'Email Address'
+	                    ),
+	                    _react2.default.createElement(
+	                        'dd',
+	                        null,
+	                        contact.emailAddress
+	                    ),
+	                    _react2.default.createElement(
+	                        'dt',
+	                        null,
+	                        'Address'
+	                    ),
+	                    _react2.default.createElement(
+	                        'dd',
+	                        null,
+	                        contact.address
+	                    )
 	                ),
 	                _react2.default.createElement(
 	                    _reactRouter.Link,
@@ -34722,6 +34798,12 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _ContactsService = __webpack_require__(530);
+
+	var _immutabilityHelper = __webpack_require__(532);
+
+	var _immutabilityHelper2 = _interopRequireDefault(_immutabilityHelper);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -34733,17 +34815,90 @@
 	var ContactForm = function (_Component) {
 	    _inherits(ContactForm, _Component);
 
-	    function ContactForm() {
+	    function ContactForm(props) {
 	        _classCallCheck(this, ContactForm);
 
-	        return _possibleConstructorReturn(this, (ContactForm.__proto__ || Object.getPrototypeOf(ContactForm)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (ContactForm.__proto__ || Object.getPrototypeOf(ContactForm)).call(this, props));
+
+	        _this.state = {
+	            contact: null
+	        };
+
+	        _this.add = _this.add.bind(_this);
+	        _this.update = _this.update.bind(_this);
+	        _this.delete = _this.delete.bind(_this);
+	        _this.updateContactState = _this.updateContactState.bind(_this);
+	        return _this;
 	    }
 
 	    _createClass(ContactForm, [{
+	        key: 'add',
+	        value: function add() {
+	            (0, _ContactsService.AddContact)(this.state.contact).done(function () {
+	                alert('Contact added');
+	            });
+	        }
+	    }, {
+	        key: 'update',
+	        value: function update() {
+	            debugger;
+	            (0, _ContactsService.UpdatedContact)(this.state.contact).done(function () {
+	                alert('Contact updated');
+	            });
+	        }
+	    }, {
+	        key: 'delete',
+	        value: function _delete() {
+	            (0, _ContactsService.DeleteContact)(this.state.contact).done(function () {
+	                alert('Contact deleted');
+	            });
+	        }
+	    }, {
+	        key: 'updateContactState',
+	        value: function updateContactState(newContactState) {
+	            this.setState(function (prevState) {
+	                var changedPropKey = Object.keys(newContactState)[0];
+	                var changedPropValue = newContactState[changedPropKey];
+
+	                newContactState[changedPropKey] = { $set: changedPropValue };
+
+	                var mergedContactState = (0, _immutabilityHelper2.default)(prevState.contact, newContactState);
+
+	                return {
+	                    contact: mergedContactState
+	                };
+	            });
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            var contactId = this.props.params.id;
+
+	            // If Editing
+	            if (contactId) {
+	                (0, _ContactsService.GetContact)(contactId).done(function (contact) {
+	                    _this2.setState({
+	                        contact: contact
+	                    });
+	                });
+	            } else {
+	                // If Adding
+	                this.setState({
+	                    contact: {}
+	                });
+	            }
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {}
+	    }, {
 	        key: 'render',
 	        value: function render() {
-	            debugger;
-	            var contact = this.props.contact;
+	            var _this3 = this;
+
+	            var contact = this.state.contact;
 
 	            if (!contact) {
 	                return _react2.default.createElement(
@@ -34754,23 +34909,112 @@
 	            }
 
 	            return _react2.default.createElement(
-	                'div',
-	                null,
+	                'form',
+	                { onSubmit: this.update },
 	                _react2.default.createElement(
-	                    'h4',
+	                    'div',
 	                    null,
-	                    'Contact Edit: ',
-	                    this.props.params.id
+	                    _react2.default.createElement(
+	                        'label',
+	                        null,
+	                        'Name',
+	                        _react2.default.createElement('input', { placeholder: 'Name', type: 'text', value: contact.name, onChange: function onChange(e) {
+	                                return _this3.updateContactState({ name: e.target.value });
+	                            }, required: true })
+	                    )
 	                ),
 	                _react2.default.createElement(
-	                    'h5',
+	                    'div',
 	                    null,
-	                    contact.nickName
+	                    _react2.default.createElement(
+	                        'label',
+	                        null,
+	                        'Nick Name',
+	                        _react2.default.createElement('input', { placeholder: 'Nick Name', type: 'text', value: contact.nickName, onChange: function onChange(e) {
+	                                return _this3.updateContactState({ nickName: e.target.value });
+	                            } })
+	                    )
 	                ),
 	                _react2.default.createElement(
-	                    'p',
+	                    'div',
 	                    null,
-	                    contact.name
+	                    _react2.default.createElement(
+	                        'label',
+	                        null,
+	                        'Birthday',
+	                        _react2.default.createElement('input', { placeholder: 'Birthday', type: 'date', value: contact.birthday, onChange: function onChange(e) {
+	                                return _this3.updateContactState({ birthday: e.target.value });
+	                            } })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'label',
+	                        null,
+	                        'Job Title',
+	                        _react2.default.createElement('input', { placeholder: 'Job Title', type: 'text', value: contact.jobTitle, onChange: function onChange(e) {
+	                                return _this3.updateContactState({ jobTitle: e.target.value });
+	                            } })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'label',
+	                        null,
+	                        'Company',
+	                        _react2.default.createElement('input', { placeholder: 'Company', type: 'text', value: contact.company, onChange: function onChange(e) {
+	                                return _this3.updateContactState({ company: e.target.value });
+	                            } })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'label',
+	                        null,
+	                        'Phone Number',
+	                        _react2.default.createElement('input', { placeholder: 'Phone Number', type: 'tel', value: contact.phoneNumber, onChange: function onChange(e) {
+	                                return _this3.updateContactState({ phoneNumber: e.target.value });
+	                            } })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'label',
+	                        null,
+	                        'Email Address',
+	                        _react2.default.createElement('input', { placeholder: 'Email Address', type: 'email', value: contact.emailAddress, onChange: function onChange(e) {
+	                                return _this3.updateContactState({ emailAddress: e.target.value });
+	                            } })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'label',
+	                        null,
+	                        'Address',
+	                        _react2.default.createElement('input', { placeholder: 'Address', type: 'text', value: contact.address, onChange: function onChange(e) {
+	                                return _this3.updateContactState({ address: e.target.value });
+	                            } })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'button',
+	                        { type: 'submit' },
+	                        'Save Contact'
+	                    )
 	                )
 	            );
 	        }
@@ -34780,6 +35024,181 @@
 	}(_react.Component);
 
 	exports.default = ContactForm;
+
+/***/ },
+/* 532 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var invariant = __webpack_require__(477);
+
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var splice = Array.prototype.splice;
+
+	function assign(target, source) {
+	  for (var key in source) {
+	    if (hasOwnProperty.call(source, key)) {
+	      target[key] = source[key];
+	    }
+	  }
+	  return target;
+	}
+
+	function copy(object) {
+	  if (object instanceof Array) {
+	    return object.slice();
+	  } else if (object && typeof object === 'object') {
+	    return assign(new object.constructor(), object);
+	  } else {
+	    return object;
+	  }
+	}
+
+
+	function newContext() {
+	  var commands = assign({}, defaultCommands);
+	  update.extend = function(directive, fn) {
+	    commands[directive] = fn;
+	  }
+
+	  return update;
+
+	  function update(object, spec) {
+	    invariant(
+	      typeof spec === 'object',
+	      'update(): You provided a key path to update() that did not contain one ' +
+	      'of %s. Did you forget to include {%s: ...}?',
+	      Object.keys(commands).join(', '),
+	      '$set'
+	    );
+
+	    var newObject = object;
+	    for (var key in spec) {
+	      if (hasOwnProperty.call(commands, key)) {
+	        return commands[key](spec[key], newObject, spec, object);
+	      }
+	    }
+	    for (var key in spec) {
+	      var nextValueForKey = update(object[key], spec[key]);
+	      if (nextValueForKey === object[key]) {
+	        continue;
+	      }
+	      if (newObject === object) {
+	        newObject = copy(object);
+	      }
+	      newObject[key] = nextValueForKey;
+	    }
+	    return newObject;
+	  }
+
+	}
+
+	var defaultCommands = {
+	  $push: function(value, original, spec) {
+	    invariantPushAndUnshift(original, spec, '$push');
+	    return original.concat(value);
+	  },
+	  $unshift: function(value, original, spec) {
+	    invariantPushAndUnshift(original, spec, '$unshift');
+	    return value.concat(original);
+	  },
+	  $splice: function(value, newObject, spec, object) {
+	    var originalValue = newObject === object ? copy(object) : newObject;
+	    invariantSplices(originalValue, spec);
+	    value.forEach(function(args) {
+	      invariantSplice(args);
+	      splice.apply(originalValue, args);
+	    });
+	    return originalValue;
+	  },
+	  $set: function(value, original, spec) {
+	    invariantSet(spec);
+	    return value;
+	  },
+	  $merge: function(value, newObject, spec, object) {
+	    var originalValue = newObject === object ? copy(object) : newObject;
+	    invariantMerge(originalValue, value);
+	    Object.keys(value).forEach(function(key) {
+	      originalValue[key] = value[key];
+	    });
+	    return originalValue;
+	  },
+	  $apply: function(value, original) {
+	    invariantApply(value);
+	    return value(original);
+	  }
+	};
+
+
+
+	module.exports = newContext();
+	module.exports.newContext = newContext;
+
+
+	// invariants
+
+	function invariantPushAndUnshift(value, spec, command) {
+	  invariant(
+	    Array.isArray(value),
+	    'update(): expected target of %s to be an array; got %s.',
+	    command,
+	    value
+	  );
+	  var specValue = spec[command];
+	  invariant(
+	    Array.isArray(specValue),
+	    'update(): expected spec of %s to be an array; got %s. ' +
+	    'Did you forget to wrap your parameter in an array?',
+	    command,
+	    specValue
+	  );
+	}
+
+	function invariantSplices(value, spec) {
+	  invariant(
+	    Array.isArray(value),
+	    'Expected $splice target to be an array; got %s',
+	    value
+	  );
+	  invariantSplice(spec['$splice']);
+	}
+
+	function invariantSplice(value) {
+	  invariant(
+	    Array.isArray(value),
+	    'update(): expected spec of $splice to be an array of arrays; got %s. ' +
+	    'Did you forget to wrap your parameters in an array?',
+	    value
+	  );
+	}
+
+	function invariantApply(fn) {
+	  invariant(
+	    typeof fn === 'function',
+	    'update(): expected spec of $apply to be a function; got %s.',
+	    fn
+	  );
+	}
+
+	function invariantSet(spec) {
+	  invariant(
+	    Object.keys(spec).length === 1,
+	    'Cannot have more than one key in an object with $set'
+	  );
+	}
+
+	function invariantMerge(target, specValue) {
+	  invariant(
+	    specValue && typeof specValue === 'object',
+	    'update(): $merge expects a spec of type \'object\'; got %s',
+	    specValue
+	  );
+	  invariant(
+	    target && typeof target === 'object',
+	    'update(): $merge expects a target of type \'object\'; got %s',
+	    target
+	  );
+	}
+
 
 /***/ }
 /******/ ]);

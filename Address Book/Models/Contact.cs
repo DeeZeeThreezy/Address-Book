@@ -10,6 +10,7 @@ namespace Address_Book.Models
     {
         public int Id { get; set; }
 
+        [Required]
         public string Name { get; set; }
         public string NickName { get; set; }
         public DateTime? Birthday { get; set; }
