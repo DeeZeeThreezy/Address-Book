@@ -118,7 +118,9 @@ namespace AddressBook.Data.Contact
 
         public void Delete(Contact entity)
         {
-            _CachedContacts.Remove(entity);
+
+            var contactIndex = _CachedContacts.FindIndex(x => x.Id == entity.Id);
+            _CachedContacts.RemoveAt(contactIndex);
         }
     }
 }
