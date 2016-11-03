@@ -29421,12 +29421,6 @@
 	    key: 'render',
 	    value: function render() {
 
-	      var dummyContacts = [{
-	        id: 0,
-	        name: 'Domingo',
-	        nickName: 'Dom'
-	      }];
-
 	      return _react2.default.createElement(
 	        _reactRouter.Router,
 	        { history: _reactRouter.hashHistory },
@@ -34391,10 +34385,28 @@
 	        _this.state = {
 	            contacts: []
 	        };
+
+	        _this.deleteCallback = _this.deleteCallback.bind(_this);
 	        return _this;
 	    }
 
 	    _createClass(ContactsList, [{
+	        key: 'deleteCallback',
+	        value: function deleteCallback(deletedContact) {
+	            this.setState(function (prevState) {
+
+	                var contactIndex = prevState.contacts.findIndex(function (c) {
+	                    return c == deletedContact;
+	                });
+
+	                prevState.contacts.splice(contactIndex, 1);
+
+	                return {
+	                    contacts: prevState.contacts
+	                };
+	            });
+	        }
+	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            var _this2 = this;
@@ -34411,7 +34423,8 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            debugger;
+	            var _this3 = this;
+
 	            var contacts = this.state.contacts;
 
 	            if (!contacts) {
@@ -34430,9 +34443,9 @@
 
 	            var contactItems = contacts.map(function (c) {
 	                return _react2.default.createElement(
-	                    'li',
-	                    { key: c.id },
-	                    _react2.default.createElement(_Contact2.default, { contact: c })
+	                    'div',
+	                    { to: '/contact/' + c.id, key: c.id, className: 'list-group-item' },
+	                    _react2.default.createElement(_Contact2.default, { contact: c, deleteCallback: _this3.deleteCallback })
 	                );
 	            });
 
@@ -34440,14 +34453,40 @@
 	                'div',
 	                null,
 	                _react2.default.createElement(
-	                    'ul',
-	                    null,
-	                    contactItems
+	                    'div',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-12' },
+	                        _react2.default.createElement('h3', null)
+	                    )
 	                ),
 	                _react2.default.createElement(
-	                    _reactRouter.Link,
-	                    { to: '/contact/new' },
-	                    'Add New Contact'
+	                    'div',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-12' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'list-group' },
+	                            contactItems
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-12' },
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/contact/new', className: 'btn btn-primary', role: 'button' },
+	                            _react2.default.createElement('i', { className: 'glyphicon glyphicon-plus' }),
+	                            ' Add New Contact'
+	                        )
+	                    )
 	                )
 	            );
 	        }
@@ -34476,6 +34515,8 @@
 
 	var _reactRouter = __webpack_require__(469);
 
+	var _ContactsService = __webpack_require__(526);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -34487,13 +34528,31 @@
 	var Contact = function (_Component) {
 	    _inherits(Contact, _Component);
 
-	    function Contact() {
+	    function Contact(props) {
 	        _classCallCheck(this, Contact);
 
-	        return _possibleConstructorReturn(this, (Contact.__proto__ || Object.getPrototypeOf(Contact)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (Contact.__proto__ || Object.getPrototypeOf(Contact)).call(this, props));
+
+	        _this.delete = _this.delete.bind(_this);
+
+	        _this.deleteCallback = props.deleteCallback;
+	        return _this;
 	    }
 
 	    _createClass(Contact, [{
+	        key: 'delete',
+	        value: function _delete() {
+	            var _this2 = this;
+
+	            (0, _ContactsService.DeleteContact)(this.props.contact).done(function () {
+	                alert('Contact deleted');
+
+	                if (_this2.deleteCallback) {
+	                    _this2.deleteCallback(_this2.props.contact);
+	                }
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var contact = this.props.contact;
@@ -34508,20 +34567,40 @@
 
 	            return _react2.default.createElement(
 	                'div',
-	                null,
+	                { className: 'row' },
 	                _react2.default.createElement(
-	                    _reactRouter.Link,
-	                    { to: "/contact/" + contact.id },
+	                    'div',
+	                    { className: 'col-md-8' },
 	                    _react2.default.createElement(
 	                        'h3',
 	                        null,
-	                        contact.nickName ? contact.nickName : contact.name
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/contact/' + contact.id },
+	                            contact.nickName ? contact.nickName : contact.name
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        contact.name
 	                    )
 	                ),
 	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    contact.name
+	                    'div',
+	                    { className: 'col-md-4' },
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/contact/' + contact.id + '/edit', className: 'btn btn-default', role: 'button' },
+	                        _react2.default.createElement('i', { className: 'glyphicon glyphicon-edit' }),
+	                        ' Edit'
+	                    ),
+	                    _react2.default.createElement(
+	                        'button',
+	                        { onClick: this.delete, className: 'btn btn-danger', type: 'button' },
+	                        _react2.default.createElement('i', { className: 'glyphicon glyphicon-trash' }),
+	                        ' Delete'
+	                    )
 	                )
 	            );
 	        }
@@ -34821,7 +34900,7 @@
 	        _this.state = {
 	            contact: null
 	        };
-	        debugger;
+
 	        _this.add = _this.add.bind(_this);
 	        _this.update = _this.update.bind(_this);
 	        _this.delete = _this.delete.bind(_this);
@@ -34838,16 +34917,13 @@
 	    }, {
 	        key: 'add',
 	        value: function add() {
-	            debugger;
 	            (0, _ContactsService.AddContact)(this.state.contact).done(function (contact) {
-	                debugger;
 	                alert('Contact added');
 	            });
 	        }
 	    }, {
 	        key: 'update',
 	        value: function update() {
-	            debugger;
 	            (0, _ContactsService.UpdatedContact)(this.state.contact).done(function () {
 	                alert('Contact updated');
 	            });

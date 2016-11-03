@@ -9,14 +9,6 @@ import ContactForm from './ContactForm';
 class App extends Component {
   render() {
 
-    var dummyContacts = [
-      {
-        id: 0,
-        name: 'Domingo',
-        nickName: 'Dom'
-      }
-    ];
-
     return (
       <Router history={hashHistory}>
         <Route path="/" component={ContactsList} />

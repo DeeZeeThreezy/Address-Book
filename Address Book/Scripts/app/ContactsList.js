@@ -12,6 +12,21 @@ class ContactsList extends Component {
         this.state = {
             contacts: []
         };
+
+        this.deleteCallback = this.deleteCallback.bind(this);
+    }
+
+    deleteCallback(deletedContact) {
+        this.setState((prevState) => {
+
+            var contactIndex = prevState.contacts.findIndex(c => c == deletedContact);
+
+            prevState.contacts.splice(contactIndex, 1);
+
+            return {
+                contacts: prevState.contacts
+            };
+        });
     }
 
     componentDidMount() {
@@ -27,7 +42,6 @@ class ContactsList extends Component {
     }
 
     render() {
-        debugger;
         var contacts = this.state.contacts;
 
         if(!contacts) {
@@ -42,15 +56,28 @@ class ContactsList extends Component {
         }
 
         var contactItems = contacts.map(c => (
-            <li key={c.id}><Contact contact={c}></Contact></li>
+            <div to={`/contact/${c.id}`} key={c.id} className="list-group-item"><Contact contact={c} deleteCallback={this.deleteCallback}></Contact></div>
         ));
 
         return (
             <div>
-                <ul>
-                    {contactItems}
-                </ul>
-                <Link to={`/contact/new`}>Add New Contact</Link>
+                <div className="row">
+                    <div className="col-md-12">
+                        <h3></h3>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-md-12">
+                        <div className="list-group">
+                            {contactItems}
+                        </div>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-md-12">
+                        <Link to={`/contact/new`} className="btn btn-primary" role="button"><i className="glyphicon glyphicon-plus"></i> Add New Contact</Link>
+                    </div>
+                </div>
             </div>
         );
     }

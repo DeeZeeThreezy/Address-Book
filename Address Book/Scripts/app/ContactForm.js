@@ -10,7 +10,7 @@ class ContactForm extends Component {
         this.state = {
             contact: null
         };
-        debugger;
+
         this.add = this.add.bind(this);
         this.update = this.update.bind(this);
         this.delete = this.delete.bind(this);
@@ -24,14 +24,11 @@ class ContactForm extends Component {
 
 
     add() {
-        debugger;
         AddContact(this.state.contact).done((contact) => {
-            debugger;
             alert('Contact added');
         });
     }
     update() {
-        debugger;
         UpdatedContact(this.state.contact).done(() => {
             alert('Contact updated');
         });
