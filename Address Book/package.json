@@ -32,4 +32,5 @@
       "react"
     ]
   }
+, "-vs-binding":{"ProjectOpened":["watch-webpack"]}
 }
