@@ -49,7 +49,7 @@ class ContactInfo extends Component {
 
         return (
             <div>
-                <h4>Contact: {contact.nickName ? contact.nickName : contact.name}</h4>
+                <h3>Contact: {contact.nickName ? contact.nickName : contact.name}</h3>
                 <dl>
                     <dt>Name</dt>
                     <dd>{contact.name}</dd>

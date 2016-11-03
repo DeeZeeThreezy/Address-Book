@@ -34453,6 +34453,11 @@
 	                'div',
 	                null,
 	                _react2.default.createElement(
+	                    'h3',
+	                    null,
+	                    'Contacts'
+	                ),
+	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'row' },
 	                    _react2.default.createElement(
@@ -34545,8 +34550,6 @@
 	            var _this2 = this;
 
 	            (0, _ContactsService.DeleteContact)(this.props.contact).done(function () {
-	                alert('Contact deleted');
-
 	                if (_this2.deleteCallback) {
 	                    _this2.deleteCallback(_this2.props.contact);
 	                }
@@ -34572,7 +34575,7 @@
 	                    'div',
 	                    { className: 'col-md-8' },
 	                    _react2.default.createElement(
-	                        'h3',
+	                        'h4',
 	                        null,
 	                        _react2.default.createElement(
 	                            _reactRouter.Link,
@@ -34751,7 +34754,7 @@
 	                'div',
 	                null,
 	                _react2.default.createElement(
-	                    'h4',
+	                    'h3',
 	                    null,
 	                    'Contact: ',
 	                    contact.nickName ? contact.nickName : contact.name

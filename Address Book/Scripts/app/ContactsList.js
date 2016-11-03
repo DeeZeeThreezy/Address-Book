@@ -61,6 +61,7 @@ class ContactsList extends Component {
 
         return (
             <div>
+                <h3>Contacts</h3>
                 <div className="row">
                     <div className="col-md-12">
                         <h3></h3>

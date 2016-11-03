@@ -15,8 +15,6 @@ class Contact extends Component {
 
     delete() {
         DeleteContact(this.props.contact).done(() => {
-            alert('Contact deleted');
-
             if(this.deleteCallback) {
                 this.deleteCallback(this.props.contact);
             } 
@@ -36,7 +34,7 @@ class Contact extends Component {
         return (
             <div className="row">
                 <div className="col-md-8">
-                    <h3><Link to={`/contact/${contact.id}`}>{contact.nickName ? contact.nickName : contact.name}</Link></h3>
+                    <h4><Link to={`/contact/${contact.id}`}>{contact.nickName ? contact.nickName : contact.name}</Link></h4>
                     <p>{contact.name}</p>
                 </div>
                 <div className="col-md-4">
